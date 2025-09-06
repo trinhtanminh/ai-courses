@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khoá học</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+    <link rel="modulepreload" href="/js/firebase.js" />
+    <link rel="modulepreload" href="/js/auth.js" />
+    <link rel="modulepreload" href="/js/components.user.js" />
+    <link rel="modulepreload" href="/js/courses.js" />
+    <link rel="modulepreload" href="/js/header.js" />
+    <link rel="preload" as="style" href="/css/liquid.css" />
+    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
+  </head>
+  <body class="apple text-gray-900 min-h-screen flex flex-col">
+    <div id="siteHeader"></div>
+
+    <main class="section flex-1">
+      <div class="mx-auto max-w-screen-xl px-4 min-h-full">
+        <div id="courseHeader" class="glass-card p-4 mb-6">
+          <h1 id="courseTitle" class="text-2xl font-semibold"></h1>
+          <p id="courseDesc" class="text-gray-600 mt-1"></p>
+        </div>
+        <section>
+          <ol id="lessons" class="space-y-3"></ol>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { requireAuth } from './js/auth.js';
+      import { loadCourseAndRender } from './js/courses.js';
+
+      await requireAuth('/login.html');
+      await loadCourseAndRender(new URLSearchParams(location.search).get('id'), {
+        titleEl: document.getElementById('courseTitle'),
+        descEl: document.getElementById('courseDesc'),
+        listEl: document.getElementById('lessons')
+      });
+    </script>
+    <script type="module" src="/js/header.js"></script>
+  </body>
+  </html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng quản trị</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firebasestorage.app" crossorigin />
+    <link rel="modulepreload" href="/js/firebase.js" />
+    <link rel="modulepreload" href="/js/auth.js" />
+    <link rel="modulepreload" href="/js/components.admin.js" />
+    <link rel="modulepreload" href="/js/admin.js" />
+    <link rel="modulepreload" href="/js/header.js" />
+    <link rel="preload" as="style" href="/css/liquid.css" />
+    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
+  </head>
+  <body class="apple text-gray-900 min-h-screen flex flex-col">
+    <div id="siteHeader"></div>
+
+    <main class="container w-full max-w-none px-4 py-6 flex-1">
+      <div class="w-full grid grid-cols-1 md:grid-cols-[260px,1fr] gap-6 min-h-full">
+        <aside class="glass-sidebar h-max">
+          <div class="nav-header">
+            <div class="nav-title">Điều hướng</div>
+            <div class="nav-badge">Admin</div>
+          </div>
+          <div class="nav-section">Danh mục</div>
+          <nav class="nav-list">
+            <a class="nav-pill" href="#users/list">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Quản lý người dùng</span>
+            </a>
+            <a class="nav-pill" href="#courses/list">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V6.5a2 2 0 0 1 1.2-1.84l5.6-2.5a2 2 0 0 1 1.6 0l5.6 2.5A2 2 0 0 1 19 6.5v13"/><path d="M4 6.5l8 3.5 8-3.5"/><path d="M12 10v12"/></svg>
+              <span>Quản lý khoá học</span>
+            </a>
+          </nav>
+        </aside>
+        <section id="view" class="min-h-full w-full bg-white border rounded p-4"></section>
+      </div>
+    </main>
+
+    
+
+    <!-- Templates required by js/admin.js -->
+    <template id="userRowTpl">
+      <tr class="border-t">
+        <td class="p-2 email"></td>
+        <td class="p-2">
+          <select class="role border rounded px-2 py-1 text-xs">
+            <option value="student">student</option>
+            <option value="admin">admin</option>
+          </select>
+        </td>
+        <td class="p-2 text-xs courses"></td>
+        <td class="p-2 text-xs status"></td>
+        <td class="p-2 text-xs">
+          <button class="toggle px-2 py-1 bg-gray-200 rounded text-xs">Toggle</button>
+          <button class="assign px-2 py-1 bg-gray-200 rounded text-xs">Cấp khoá</button>
+          <button class="remove px-2 py-1 bg-rose-600 text-white rounded text-xs">Xoá hồ sơ</button>
+          <button class="edit px-2 py-1 bg-gray-200 rounded text-xs">Sửa</button>
+        </td>
+      </tr>
+    </template>
+
+    <template id="userEditTpl">
+      <div class="bg-white border rounded p-4">
+        <h2 class="text-lg font-semibold mb-3">Chỉnh sửa người dùng</h2>
+        <div class="text-sm text-gray-600 mb-2">UID: <span class="uid font-mono"></span></div>
+        <form class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <label class="block">
+            <span class="text-sm">Email</span>
+            <input name="email" class="border rounded w-full px-3 py-2" />
+          </label>
+          <label class="block">
+            <span class="text-sm">Vai trò</span>
+            <select name="role" class="border rounded w-full px-3 py-2">
+              <option value="student">student</option>
+              <option value="admin">admin</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" name="disabled" />
+            <span class="text-sm">Vô hiệu</span>
+          </label>
+          <div class="md:col-span-3 flex gap-2">
+            <input name="courseId" placeholder="Thêm ID khoá học" class="border rounded px-3 py-2 text-sm flex-1" />
+            <button class="addCourse bg-blue-600 text-white rounded px-3 py-2 text-sm">Cấp khoá</button>
+          </div>
+          <div class="md:col-span-3">
+            <div class="text-sm text-gray-600 mb-1">Khoá học đã cấp</div>
+            <div class="courses text-sm"></div>
+          </div>
+          <div class="md:col-span-3 flex gap-2 mt-2">
+            <button class="save bg-green-600 text-white rounded px-4 py-2">Lưu</button>
+            <a href="#users/list" class="px-4 py-2 rounded border">Huỷ</a>
+          </div>
+        </form>
+      </div>
+      <div class="mt-4"><a class="text-sm text-gray-600 hover:underline" href="#users/list">Quay lại danh sách</a></div>
+    </template>
+
+    <template id="courseAdminCardTpl">
+      <div class="bg-white border rounded p-4">
+        <div class="font-semibold title"></div>
+        <div class="text-sm text-gray-600 desc mt-1"></div>
+        <div class="text-xs text-gray-500 mt-1">ID: <span class="cid font-mono"></span></div>
+        <div class="text-xs text-gray-500 mt-2 lessonsCount"></div>
+        <div class="flex gap-2 mt-3">
+          <button class="edit px-3 py-1 text-xs bg-gray-200 rounded">Sửa</button>
+          <button class="delete px-3 py-1 text-xs bg-rose-600 text-white rounded">Xoá</button>
+        </div>
+        <details class="mt-3">
+          <summary class="text-xs text-gray-700 cursor-pointer">Bài học</summary>
+          <div class="mt-2 space-y-2 lessons"></div>
+          <form class="addLesson mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <input name="title" class="border rounded px-2 py-1" placeholder="Tiêu đề bài học" required />
+            <div class="md:col-span-2 videos-group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm">Video</span>
+                <button type="button" class="addVideo text-xs bg-gray-200 rounded px-2 py-1">+ Thêm video</button>
+              </div>
+              <div class="videosRows space-y-2"></div>
+            </div>
+            <textarea name="content" class="border rounded px-2 py-1 md:col-span-2" placeholder="Nội dung bài học (mô tả dài)"></textarea>
+            <textarea name="notes" class="border rounded px-2 py-1 md:col-span-2" placeholder="Ghi chú"></textarea>
+            <textarea name="exercises" class="border rounded px-2 py-1 md:col-span-2" placeholder="Bài tập (mỗi dòng một mục)"></textarea>
+            <div class="md:col-span-2 resources-group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm">Tài liệu</span>
+                <button type="button" class="addResource text-xs bg-gray-200 rounded px-2 py-1">+ Thêm tài liệu</button>
+              </div>
+              <div class="resourcesRows space-y-2"></div>
+            </div>
+            <div class="md:col-span-2">
+              <button class="bg-blue-600 text-white rounded px-3">Thêm bài học</button>
+            </div>
+          </form>
+        </details>
+      </div>
+    </template>
+
+    <template id="courseEditTpl">
+      <div class="bg-white border rounded p-4">
+        <h2 class="text-lg font-semibold mb-3">Chỉnh sửa khoá học</h2>
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label class="block">
+            <span class="text-sm">Tiêu đề</span>
+            <input name="title" class="border rounded w-full px-3 py-2" />
+          </label>
+          <label class="block">
+            <span class="text-sm">Mô tả</span>
+            <input name="description" class="border rounded w-full px-3 py-2" />
+          </label>
+          <div class="md:col-span-2">
+            <div class="text-sm text-gray-600 mb-1">Bài học</div>
+            <div class="lessons space-y-2"></div>
+            <form class="addLesson mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+              <input name="title" class="border rounded px-2 py-1" placeholder="Tiêu đề bài học" required />
+              <div class="md:col-span-2 videos-group">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-sm">Video</span>
+                  <button type="button" class="addVideo text-xs bg-gray-200 rounded px-2 py-1">+ Thêm video</button>
+                </div>
+                <div class="videosRows space-y-2"></div>
+              </div>
+              <textarea name="content" class="border rounded px-2 py-1 md:col-span-2" placeholder="Nội dung bài học (mô tả dài)"></textarea>
+              <textarea name="notes" class="border rounded px-2 py-1 md:col-span-2" placeholder="Ghi chú"></textarea>
+              <textarea name="exercises" class="border rounded px-2 py-1 md:col-span-2" placeholder="Bài tập (mỗi dòng một mục)"></textarea>
+              <div class="md:col-span-2 resources-group">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-sm">Tài liệu</span>
+                  <button type="button" class="addResource text-xs bg-gray-200 rounded px-2 py-1">+ Thêm tài liệu</button>
+                </div>
+                <div class="resourcesRows space-y-2"></div>
+              </div>
+              <div class="md:col-span-2">
+                <button class="bg-blue-600 text-white rounded px-3">Thêm bài học</button>
+              </div>
+            </form>
+          </div>
+          <div class="md:col-span-2 flex gap-2 mt-2">
+            <button class="save bg-green-600 text-white rounded px-4 py-2">Lưu</button>
+            <a href="#courses/list" class="px-4 py-2 rounded border">Huỷ</a>
+          </div>
+        </form>
+      </div>
+    </template>
+
+    <script type="module">
+      import { requireAdmin } from './js/auth.js';
+      import { setupAdminApp } from './js/admin.js';
+
+      await requireAdmin('/login.html');
+
+      const view = document.getElementById('view');
+      const tpl = {
+        userRow: document.getElementById('userRowTpl'),
+        userEdit: document.getElementById('userEditTpl'),
+        courseCard: document.getElementById('courseAdminCardTpl'),
+        courseEdit: document.getElementById('courseEditTpl')
+      };
+      setupAdminApp({ view, tpl });
+      const highlight = () => {
+        const curr = location.hash || '#dashboard';
+        document.querySelectorAll('aside .nav-pill').forEach(a => {
+          const href = a.getAttribute('href') || '';
+          a.classList.toggle('active', href === curr);
+        });
+      };
+      window.addEventListener('hashchange', highlight);
+      highlight();
+    </script>
+    <script type="module" src="/js/header.js"></script>
+  </body>
+  </html>

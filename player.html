@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Performance: warm up critical third-party connections -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
+
+    <!-- Preload local modules to reduce waterfall -->
+    <link rel="modulepreload" href="/js/firebase.js" />
+    <link rel="modulepreload" href="/js/auth.js" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <meta http-equiv="Referrer-Policy" content="no-referrer" />
+    <style>
+      html, body { height: 100%; margin: 0; background: #000; }
+      .wrap { height: 100%; }
+      /* Chặn menu chuột phải để hạn chế tải dễ dãi (không tuyệt đối) */
+      body { -webkit-user-select: none; user-select: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="wrap">
+      <div class="w-full h-full flex items-center justify-center text-white/80">Đang tải…</div>
+    </div>
+    <script type="module">
+      import { requireAuth } from './js/auth.js';
+      await requireAuth('/login.html');
+
+      const p = new URLSearchParams(location.search);
+      const b64 = p.get('embed') || '';
+      const b64o = p.get('o') || '';
+      let url = '';
+      let originalUrl = '';
+      try {
+        url = atob(b64);
+      } catch (e) {}
+      try {
+        originalUrl = atob(b64o);
+      } catch (e) {}
+
+      function isAllowed(u) {
+        try {
+          const x = new URL(u);
+          if (x.hostname.endsWith('youtube.com') && x.pathname.startsWith('/embed/')) return true;
+          // Allow Drive preview: /file/d/ID/preview or /file/u/0/d/ID/preview
+          if (x.hostname.endsWith('drive.google.com') && /\/file\/(?:u\/\d+\/)?d\/[^/]+\/preview$/.test(x.pathname)) return true;
+          return false;
+        } catch (e) { return false; }
+      }
+
+      const root = document.getElementById('root');
+      if (!url || !isAllowed(url)) {
+        const title = (new URLSearchParams(location.search).get('t') || '').toString();
+        const fallbackUrl = originalUrl || url || '';
+        root.innerHTML = '';
+        const container = document.createElement('div');
+        container.className = 'w-full h-full';
+        const bar = document.createElement('div');
+        bar.className = 'flex items-center justify-between text-xs text-white/70 px-3 py-2 bg-black/40';
+        const titleSpan = document.createElement('div');
+        titleSpan.textContent = title || 'Không thể nhúng video';
+        bar.appendChild(titleSpan);
+        const actions = document.createElement('div');
+        if (fallbackUrl) {
+          const a = document.createElement('a');
+          a.href = fallbackUrl;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.className = 'underline hover:no-underline text-white/80';
+          a.textContent = 'Mở trong tab mới';
+          actions.appendChild(a);
+        }
+        bar.appendChild(actions);
+        container.appendChild(bar);
+        const msg = document.createElement('div');
+        msg.className = 'w-full h-[calc(100%-2rem)] md:h-[calc(100%-2.25rem)] flex items-center justify-center text-sm text-white/70';
+        msg.textContent = 'Trang nguồn không cho phép nhúng (CSP). Vui lòng mở trong tab mới.';
+        container.appendChild(msg);
+        root.appendChild(container);
+      } else {
+        const title = (new URLSearchParams(location.search).get('t') || '').toString();
+        root.innerHTML = '';
+        const container = document.createElement('div');
+        container.className = 'w-full h-full';
+        const bar = document.createElement('div');
+        bar.className = 'flex items-center justify-between text-xs text-white/70 px-3 py-2 bg-black/40';
+        const titleSpan = document.createElement('div');
+        titleSpan.textContent = title || '';
+        bar.appendChild(titleSpan);
+        const actions = document.createElement('div');
+        // Always offer opening the embed URL directly in a new tab
+        if (url) {
+          const a1 = document.createElement('a');
+          a1.href = url; a1.target = '_blank'; a1.rel = 'noopener noreferrer';
+          a1.className = 'underline hover:no-underline text-white/80 mr-3';
+          a1.textContent = 'Mở video';
+          actions.appendChild(a1);
+        }
+        if (originalUrl) {
+          const a2 = document.createElement('a');
+          a2.href = originalUrl; a2.target = '_blank'; a2.rel = 'noopener noreferrer';
+          a2.className = 'underline hover:no-underline text-white/80';
+          a2.textContent = 'Link gốc';
+          actions.appendChild(a2);
+        }
+        bar.appendChild(actions);
+        container.appendChild(bar);
+        const frameWrap = document.createElement('div');
+        frameWrap.className = 'w-full h-[calc(100%-2rem)] md:h-[calc(100%-2.25rem)]';
+        const iframe = document.createElement('iframe');
+        iframe.className = 'w-full h-full';
+        iframe.src = url;
+        iframe.title = 'Video bài giảng';
+        iframe.frameBorder = '0';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'no-referrer';
+        iframe.allowFullscreen = true;
+        // Nới sandbox cho phép mở tab mới khi người dùng thao tác (giảm lỗi sandbox popups)
+        iframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation';
+        // Fallback nếu nguồn bị chặn bởi CSP hoặc không tải được
+        const showCspFallback = () => {
+          frameWrap.innerHTML = '';
+          const bar = document.createElement('div');
+          bar.className = 'flex items-center justify-between text-xs text-white/70 px-3 py-2 bg-black/40';
+          const tspan = document.createElement('div');
+          tspan.textContent = title || 'Không thể nhúng video';
+          bar.appendChild(tspan);
+          const acts = document.createElement('div');
+          if (originalUrl) {
+            const a = document.createElement('a');
+            a.href = originalUrl; a.target = '_blank'; a.rel = 'noopener noreferrer';
+            a.className = 'underline hover:no-underline text-white/80';
+            a.textContent = 'Mở trong tab mới';
+            acts.appendChild(a);
+          }
+          bar.appendChild(acts);
+          frameWrap.appendChild(bar);
+          const msg = document.createElement('div');
+          msg.className = 'w-full h-[calc(100%-2rem)] md:h-[calc(100%-2.25rem)] flex items-center justify-center text-sm text-white/70';
+          msg.textContent = 'Trang nguồn không cho phép nhúng (CSP). Vui lòng mở trong tab mới.';
+          frameWrap.appendChild(msg);
+        };
+        const watchdog = setTimeout(showCspFallback, 2500);
+        iframe.addEventListener('load', () => clearTimeout(watchdog), { once: true });
+        iframe.addEventListener('error', () => { clearTimeout(watchdog); showCspFallback(); }, { once: true });
+        frameWrap.appendChild(iframe);
+        container.appendChild(frameWrap);
+        root.appendChild(container);
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+      }
+    </script>
+  </body>
+  </html>

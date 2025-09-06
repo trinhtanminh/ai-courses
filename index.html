@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Courses – Trang chủ</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Performance: warm up critical third-party connections -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://firebasestorage.app" crossorigin />
+
+    <!-- Preload local modules and styles to reduce waterfall -->
+    <link rel="modulepreload" href="/js/firebase.js" />
+    <link rel="modulepreload" href="/js/auth.js" />
+    <link rel="modulepreload" href="/js/components.user.js" />
+    <link rel="modulepreload" href="/js/courses.js" />
+    <link rel="modulepreload" href="/js/user.app.js" />
+    <link rel="modulepreload" href="/js/header.js" />
+    <link rel="preload" as="style" href="/css/liquid.css" />
+    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
+  </head>
+  <body class="apple text-gray-900 min-h-screen flex flex-col">
+    <div id="siteHeader"></div>
+    <main class="flex-1">
+      <!-- Hero -->
+      <section class="container w-full max-w-6xl px-4 pt-14 pb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.15fr,0.85fr] gap-10 items-center">
+          <div>
+            <div class="inline-flex items-center gap-2 text-xs text-blue-700 bg-blue-50/70 border border-blue-100 rounded-full px-3 py-1 mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+              <span>Thiết kế theo phong cách Apple</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-semibold leading-[1.08] tracking-tight">
+              Học AI tinh gọn, trực quan<br class="hidden sm:block" /> và thực sự hiệu quả
+            </h1>
+            <p class="mt-4 text-gray-600 max-w-xl">
+              Lộ trình rõ ràng, theo dõi tiến trình, nội dung cập nhật liên tục. Tập trung vào trải nghiệm học mượt mà với giao diện Liquid Glass.
+            </p>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <a href="/app.html#dashboard" class="btn btn-primary btn-lg">Vào ứng dụng</a>
+              <a href="/login.html" class="btn btn-neutral btn-lg">Đăng nhập</a>
+            </div>
+            <div class="mt-4 text-xs text-gray-500">Không cần cài đặt • Đồng bộ trên mọi thiết bị</div>
+          </div>
+
+          <!-- Showcase card -->
+          <div class="glass-card p-4 rounded-2xl shadow hover-lift">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-semibold">Khoá học nổi bật</div>
+              <div class="text-[10px] text-gray-500">Xem tất cả</div>
+            </div>
+            <div class="mt-3 grid grid-cols-1 gap-3">
+              <div class="bg-white/70 border rounded p-3 flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium">Nhập môn Machine Learning</div>
+                  <div class="text-xs text-gray-500">12 bài học • Cơ bản</div>
+                </div>
+                <div class="text-[10px] text-blue-600">Bắt đầu</div>
+              </div>
+              <div class="bg-white/70 border rounded p-3 flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium">Prompt Engineering</div>
+                  <div class="text-xs text-gray-500">8 bài học • Thực chiến</div>
+                </div>
+                <div class="text-[10px] text-blue-600">Tiếp tục</div>
+              </div>
+              <div class="bg-white/70 border rounded p-3 flex items-center justify-between">
+                <div>
+                  <div class="text-sm font-medium">Xây dựng ứng dụng AI</div>
+                  <div class="text-xs text-gray-500">10 bài học • Ứng dụng</div>
+                </div>
+                <div class="text-[10px] text-blue-600">Khám phá</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust bar -->
+      <section class="container w-full max-w-6xl px-4 pb-6">
+        <div class="glass-card rounded-xl px-4 py-3 text-xs text-gray-600 flex items-center justify-center gap-6">
+          <span>Xây dựng với</span>
+          <span class="font-semibold">Firebase</span>
+          <span class="opacity-40">•</span>
+          <span class="font-semibold">Tailwind</span>
+          <span class="opacity-40">•</span>
+          <span class="font-semibold">Vanilla JS</span>
+        </div>
+      </section>
+
+      <!-- Feature cards -->
+      <section class="container w-full max-w-6xl px-4 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card p-5 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-600/90 text-white flex items-center justify-center">1</span>
+              <div class="font-semibold">Lộ trình rõ ràng</div>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Bài học cô đọng, có outline và tiêu chí hoàn thành cụ thể.</p>
+          </div>
+          <div class="glass-card p-5 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-600/90 text-white flex items-center justify-center">2</span>
+              <div class="font-semibold">Theo dõi tiến trình</div>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Đánh dấu hoàn thành, tiếp tục học dở dang ở bất cứ đâu.</p>
+          </div>
+          <div class="glass-card p-5 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-600/90 text-white flex items-center justify-center">3</span>
+              <div class="font-semibold">Quản trị tinh gọn</div>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Admin cấp quyền khoá học, quản lý nội dung tập trung.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Outline preview -->
+      <section class="container w-full max-w-6xl px-4 pb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          <div class="glass-card p-6">
+            <div class="text-sm font-semibold mb-2">Cảm hứng từ Apple</div>
+            <h2 class="text-2xl font-semibold">Trải nghiệm mượt mà, tinh tế</h2>
+            <p class="text-gray-600 mt-2">Tập trung vào nội dung, micro‑interaction nhẹ nhàng, nền glass giúp giảm nhiễu thị giác.</p>
+            <div class="mt-4 flex gap-3">
+              <a href="/app.html#home" class="btn btn-neutral">Khám phá khoá học</a>
+              <a href="/login.html" class="btn btn-primary">Bắt đầu học</a>
+            </div>
+          </div>
+          <div class="glass-card p-6">
+            <div class="text-sm font-semibold mb-3">Ví dụ outline</div>
+            <ol class="space-y-2 text-sm">
+              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
+                <span>1. Giới thiệu & thiết lập môi trường</span>
+                <span class="text-xs text-gray-500">10 phút</span>
+              </li>
+              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
+                <span>2. Khái niệm cốt lõi trong ML</span>
+                <span class="text-xs text-gray-500">18 phút</span>
+              </li>
+              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
+                <span>3. Bài tập thực hành</span>
+                <span class="text-xs text-gray-500">30 phút</span>
+              </li>
+              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
+                <span>4. Ứng dụng mini cuối chương</span>
+                <span class="text-xs text-gray-500">25 phút</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA banner -->
+      <section class="container w-full max-w-6xl px-4 pb-16">
+        <div class="glass-card p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <div class="text-sm text-gray-600">Sẵn sàng bắt đầu?</div>
+            <div class="text-xl font-semibold">Vào ứng dụng và khám phá ngay hôm nay</div>
+          </div>
+          <div class="flex gap-3">
+            <a href="/app.html#dashboard" class="btn btn-primary">Vào ứng dụng</a>
+            <a href="/login.html" class="btn btn-neutral">Đăng nhập</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-auto py-6 text-center text-xs text-gray-500">© 2025 AI Courses — Phát triển bởi Trịnh Tấn Minh</footer>
+    <script type="module" src="/js/header.js"></script>
+  </body>
+  </html>
