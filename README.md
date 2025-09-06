@@ -64,16 +64,16 @@ service cloud.firestore {
   - `videoUrl?: string` — link video (YouTube, v.v.). Hệ thống tự chuyển sang URL nhúng khi là YouTube
   - `content?: string` — nội dung bài học (mô tả dài)
   - `notes?: string` — ghi chú
-  - `exercises?: string[]` — danh sách bài tập (mỗi phần tử là một mục)
+- `exercises?: string[]` — danh sách bài tập (mỗi phần tử là một mục). Có thể nhập kèm link theo định dạng: `Tiêu đề | https://...` hoặc dán thẳng URL; hệ thống sẽ tự nhận diện và hiển thị như một liên kết (hỗ trợ các tệp tài liệu như .pdf, .docx, v.v.).
   - `resources?: { title: string, url: string }[]` — danh sách tài liệu (tiêu đề + link)
 
 - UI quản trị (admin) đã được cập nhật để điền các trường trên khi thêm bài học mới. 
-  - "Bài tập": nhập nhiều mục, phân tách dấu phẩy hoặc xuống dòng.
+- "Bài tập": nhập nhiều mục, phân tách dấu phẩy hoặc xuống dòng. Có thể kèm link ở từng dòng với định dạng `Tiêu đề | https://...` hoặc dán trực tiếp URL.
   - "Tài liệu": thêm nhiều dòng bằng nút "+ Thêm tài liệu" (mỗi dòng gồm tiêu đề và link, có thể xoá dòng).
 - Trang học (`course.html`) hiển thị:
   - Video nhúng nếu có `videoUrl`
   - Nội dung, ghi chú
-  - Danh sách bài tập và tài liệu (tiêu đề + link, mở tab mới)
+  - Danh sách bài tập và tài liệu (tiêu đề + link, mở tab mới). Bài tập chứa liên kết sẽ hiển thị icon tệp tương ứng (PDF, DOC, v.v.) và tên miền nguồn.
 
  Ví dụ một tài liệu khoá học với bài học mở rộng:
 

@@ -109,9 +109,29 @@ body.apple h3 { font-size: var(--fs-h3); line-height: 1.25; }
   box-shadow: var(--elev-2);
 }
 
+/* Override: make a specific lesson card pure white */
+#lesson-1 {
+  background: #fff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  /* Subtle, clear separation from background */
+  box-shadow: var(--elev-1);
+}
+
 /* Hover lift */
 .hover-lift { transition: transform .25s ease, box-shadow .25s ease; }
 .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(2,6,23,.08); }
+
+/* Course cover image fixed size (250x50) */
+.course-cover {
+  /* 700px x 150px => 43.75rem x 9.375rem (16px base) */
+  width: 43.75rem;
+  height: 9.375rem;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  background: rgba(0,0,0,0.05);
+}
 
 /* Buttons — Apple Liquid Glass */
 /* Base glass button */
@@ -226,7 +246,8 @@ body.apple h3 { font-size: var(--fs-h3); line-height: 1.25; }
 /* Admin overrides: make existing white bordered blocks look glassy under .apple */
 body.apple .bg-white.border { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; backdrop-filter: saturate(150%) blur(18px); -webkit-backdrop-filter: saturate(150%) blur(18px); border-radius: 14px; box-shadow: var(--glass-shadow); }
 body.apple .bg-white { background: var(--glass-bg); }
-body.apple .border { border-color: var(--glass-border); }
+/* Do not force glass border color on form controls */
+body.apple .border:not(input):not(select):not(textarea) { border-color: var(--glass-border); }
 
 /* Map existing Tailwind utility buttons to Liquid Glass look (non-intrusive) */
 /* Neutral small controls (gray pills) */
@@ -360,8 +381,8 @@ button:active, .btn:active { transform: translateY(0) scale(.985); }
 .apple textarea {
   background: var(--input-bg);
   color: var(--input-text);
-  border-color: var(--input-border);
-  border-width: 1.5px;
+  /* Ensure visible borders regardless of Preflight */
+  border: 1.5px solid var(--input-border);
   border-radius: 12px;
 }
 .apple input::placeholder,
@@ -375,6 +396,11 @@ button:active, .btn:active { transform: translateY(0) scale(.985); }
   outline: none;
   border-color: var(--input-border-focus);
   box-shadow: 0 0 0 4px var(--input-ring);
+}
+
+/* Disable hover effect for lesson content textarea only */
+.apple textarea[name="content"]:hover {
+  border-color: var(--input-border);
 }
 
 /* Cards and tables: subtle hover */
@@ -431,9 +457,10 @@ body.apple [id^="lesson-"] { scroll-margin-top: 16px; }
 }
 
 /* -------- Document View (lessons) -------- */
-.section-head { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
-.section-head .icon { font-size: .9rem; opacity: .75; }
-.section-head .label { font-weight: 600; font-size: .9rem; color: #0f172a; }
+.section-head { display: flex; align-items: center; gap: .5rem; margin-bottom: .75rem; }
+.section-head .icon { display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; border-radius: 9999px; background: rgba(2,6,23,.06); color: #334155; }
+.section-head .icon svg { width: 1rem; height: 1rem; }
+.section-head .label { font-weight: 600; font-size: .95rem; color: #0f172a; }
 
 /* Rich text body – safe by default (we still set textContent) */
 .doc { color: #0f172a; }

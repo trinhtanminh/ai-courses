@@ -30,10 +30,48 @@ export function toEmbed(url) {
   }
 }
 
+// Convert image links to a direct image URL suitable for <img src>
+// Supports Google Drive share links: /file/d/ID/view, /open?id=ID, /uc?id=ID
+export function toImageUrl(url) {
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('drive.google.com')) {
+      const parts = u.pathname.split('/').filter(Boolean);
+      let id = '';
+      const idx = parts.findIndex(p => p === 'd');
+      if (parts[0] === 'file' && idx >= 0 && parts[idx + 1]) {
+        id = parts[idx + 1];
+      } else if (u.pathname === '/open' && u.searchParams.get('id')) {
+        id = u.searchParams.get('id');
+      } else if (u.pathname.startsWith('/uc') && u.searchParams.get('id')) {
+        id = u.searchParams.get('id');
+      }
+      if (id) return `https://drive.google.com/uc?export=view&id=${id}`;
+    }
+    return url;
+  } catch (e) {
+    return url;
+  }
+}
+
 export function courseCard(course, href) {
   const a = document.createElement('a');
   a.className = 'block glass-card p-4 hover-lift transition';
   a.href = href || '#';
+  if (course?.coverUrl) {
+    const img = document.createElement('img');
+    try {
+      // Prefer direct image URL for Google Drive links
+      img.src = toImageUrl(course.coverUrl);
+    } catch {
+      img.src = course.coverUrl;
+    }
+    img.alt = 'Bìa khoá học';
+    img.className = 'course-cover mb-3';
+    img.referrerPolicy = 'no-referrer';
+    a.appendChild(img);
+  }
   const h3 = document.createElement('h3');
   h3.className = 'font-semibold';
   h3.textContent = course.title || 'Không tên';
@@ -102,30 +140,50 @@ export function lessonItem(lesson, index, checked, onToggle) {
         </div>
       </div>
       <!-- Resources moved below the video -->
-      <div class="resources hidden glass-card p-3">
+      <div class="resources hidden">
         <div class="section-head">
-          <span class="icon" aria-hidden="true">📎</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 115.66 5.66L8.94 17.08a2 2 0 11-2.83-2.83l9.19-9.19"/>
+            </svg>
+          </span>
           <span class="label">Tài liệu</span>
         </div>
         <ul class="resource-list"></ul>
       </div>
       <div class="content hidden">
         <div class="section-head">
-          <span class="icon" aria-hidden="true">✎</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+              <path d="M7 3h8l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+              <path d="M15 3v5h5"/>
+              <path d="M8 12h8M8 16h8M8 20h6"/>
+            </svg>
+          </span>
           <span class="label">Nội dung</span>
         </div>
         <div class="doc text-sm leading-relaxed"></div>
       </div>
       <div class="notes hidden">
         <div class="section-head">
-          <span class="icon" aria-hidden="true">🗒</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+              <path d="M3 17.25V21h3.75L19.81 7.94a2.65 2.65 0 0 0-3.75-3.75L3 17.25z"/>
+              <path d="M14.5 6.5l3 3"/>
+            </svg>
+          </span>
           <span class="label">Ghi chú</span>
         </div>
-        <div class="doc text-sm text-gray-700"></div>
+        <div class="doc text-sm leading-relaxed"></div>
       </div>
       <div class="exercises hidden">
         <div class="section-head">
-          <span class="icon" aria-hidden="true">✓</span>
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="16" rx="3"/>
+              <path d="M8 12l3 3 5-6"/>
+            </svg>
+          </span>
           <span class="label">Bài tập</span>
         </div>
         <ul class="resource-list"></ul>
@@ -195,20 +253,74 @@ export function lessonItem(lesson, index, checked, onToggle) {
     nwrap.classList.remove('hidden');
   }
 
-  // Exercises
+  // Exercises (support plain text or link: "Tiêu đề | https://..." or direct URL)
   if (Array.isArray(lesson.exercises) && lesson.exercises.length) {
     const ewrap = li.querySelector('.exercises');
     ewrap.id = `lesson-${index + 1}-exercises`;
+    // Header label remains default 'Bài tập'
     const ul = ewrap.querySelector('.resource-list');
     ul.innerHTML = '';
+
+    function parseExercise(ex, idx) {
+      if (typeof ex === 'object' && ex && (ex.url || ex.title)) {
+        return { text: ex.title || ex.url || `Bài tập ${idx + 1}`, href: ex.url || '' };
+      }
+      const s = (ex || '').toString().trim();
+      if (!s) return { text: `Bài tập ${idx + 1}`, href: '' };
+      // Pattern: "Tiêu đề | URL" or "Tiêu đề - URL"
+      const m = s.match(/^\s*([^|\-]+?)\s*[|\-]\s*(https?:\/\/\S+)\s*$/i);
+      if (m) return { text: m[1].trim(), href: m[2].trim() };
+      // Fallback: detect first URL anywhere
+      const urlMatch = s.match(/https?:\/\/\S+/i);
+      if (urlMatch) {
+        const href = urlMatch[0];
+        const text = s.replace(href, '').trim() || href;
+        return { text, href };
+      }
+      return { text: s, href: '' };
+    }
+
     lesson.exercises.forEach((item, i) => {
+      const { text, href } = parseExercise(item, i);
       const liItem = document.createElement('li');
       liItem.className = 'resource-item';
+
       const left = document.createElement('div');
       left.className = 'resource-left';
-      left.innerHTML = `<span class="file-ico" aria-hidden="true">✅</span><span class="resource-text"></span>`;
-      left.querySelector('.resource-text').textContent = typeof item === 'string' ? item : (item?.title || `Bài tập ${i+1}`);
+
+      const ico = document.createElement('span');
+      ico.className = 'file-ico';
+      if (href) {
+        const svg = fileIcon(href);
+        if (svg) ico.appendChild(svg); else ico.textContent = '🔗';
+      } else {
+        ico.textContent = '✅';
+      }
+
+      left.appendChild(ico);
+
+      if (href) {
+        const a = document.createElement('a');
+        a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.className = 'resource-link';
+        a.textContent = text;
+        left.appendChild(a);
+      } else {
+        const span = document.createElement('span');
+        span.className = 'resource-text';
+        span.textContent = text;
+        left.appendChild(span);
+      }
+
+      const right = document.createElement('div');
+      right.className = 'resource-right';
+      if (href) {
+        const host = hostChip(href);
+        if (host) right.appendChild(host);
+      }
+
       liItem.appendChild(left);
+      liItem.appendChild(right);
       ul.appendChild(liItem);
     });
     ewrap.classList.remove('hidden');

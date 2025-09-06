@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Courses – Trang chủ</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <!-- Performance: warm up critical third-party connections -->
     <link rel="dns-prefetch" href="//cdn.tailwindcss.com" />
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin />
@@ -23,6 +24,55 @@
     <link rel="modulepreload" href="./js/header.js" />
     <link rel="preload" as="style" href="./css/liquid.css" />
     <link rel="stylesheet" href="./css/liquid.css" />
+    <style>
+      /* Floating 3D bubbles for hero */
+      .bubble-wrap { position: relative; isolation: isolate; }
+      .bubble-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+      .bubble {
+        position: absolute; border-radius: 9999px;
+        background: radial-gradient(120% 120% at 30% 30%,
+          rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 22%,
+          rgba(180,200,255,0.28) 55%, rgba(120,160,255,0.18) 72%,
+          rgba(80,120,255,0.12) 100%);
+        box-shadow: inset -10px -14px 24px rgba(0, 40, 160, 0.08), inset 8px 10px 18px rgba(255,255,255,0.6), 0 10px 30px rgba(30,70,200,0.10);
+        filter: saturate(1.05) blur(0.2px);
+        will-change: transform;
+        animation: floatY var(--dur, 18s) linear infinite, swayX calc(var(--dur, 18s) * 0.45) ease-in-out infinite;
+        opacity: var(--op, 0.75);
+      }
+      @keyframes floatY { from { transform: translate3d(var(--sx,0px), 110%, 0) scale(var(--sc,1)); }
+                          to   { transform: translate3d(var(--sx,0px), -130%, 0) scale(var(--sc,1)); } }
+      @keyframes swayX  { 0%,100% { --sx: 0px; } 50% { --sx: var(--amp, 30px); } }
+      .bubble::after{ content:""; position:absolute; left:18%; top:20%; width:30%; height:30%; border-radius:50%; background: radial-gradient(closest-side, rgba(255,255,255,0.9), rgba(255,255,255,0) 70%); filter: blur(2px); }
+      @media (prefers-reduced-motion: reduce) { .bubble { animation: none; opacity: 0.4; } }
+
+      /* Cyberpunk title styling */
+      .fx-title { position: relative; color: #e2e8f0; letter-spacing: .5px; filter: saturate(1.08) brightness(1.04); animation: neonPulse 5s ease-in-out infinite; }
+      .fx-title::before { display: none; }
+      .fx-title::after { content:""; position:absolute; left:50%; transform: translateX(-50%); bottom:-10px; width:60%; height:2px; background: linear-gradient(90deg, rgba(255,0,230,0) 0%, rgba(255,0,230,.9) 25%, rgba(0,238,255,.95) 75%, rgba(0,238,255,0) 100%); filter: blur(6px) saturate(1.2); opacity:.9; }
+      .fx-title .char { text-shadow: 0 0 1px #fff, 0 0 6px rgba(0,238,255,.6), 0 0 14px rgba(0,238,255,.35), 0 0 26px rgba(255,0,230,.28), 0 0 40px rgba(255,0,230,.18); }
+      .fx-title .char:nth-child(odd) { text-shadow: 0 0 1px #fff, 0 0 6px rgba(255,0,230,.6), 0 0 14px rgba(255,0,230,.35), 0 0 26px rgba(0,238,255,.28), 0 0 40px rgba(0,238,255,.18); }
+      @keyframes neonPulse { 0%,100% { filter: saturate(1.02) brightness(1.02); } 45% { filter: saturate(1.2) brightness(1.12); } 70% { filter: saturate(1.1) brightness(1.06); } }
+      .fx-subtitle { color: #4b5563; letter-spacing: .2px; }
+      [data-split="chars"] { white-space: normal; }
+      [data-split="chars"] .char { display:inline-block; opacity:0; transform: translateY(12px) scale(.98); filter: blur(4px); will-change: transform, opacity, filter; animation: charIn .65s cubic-bezier(.22,.79,.25,1) both; animation-delay: calc(var(--delay, 0s) + var(--i) * .03s); }
+      @keyframes charIn { from { opacity:0; transform: translateY(12px) scale(.98); filter: blur(6px) saturate(0.6); } to { opacity:1; transform: translateY(0) scale(1); filter: blur(0) saturate(1); } }
+      @keyframes sheen { to { transform: translateX(160%); } }
+      @media (prefers-reduced-motion: reduce) {
+        [data-split="chars"] .char { animation: none; opacity: 1; transform: none; filter: none; }
+        .fx-title { animation: none; }
+        .fx-title::before { display: none; }
+      }
+
+      /* Smooth footer hover effects */
+      .footer-link {
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .footer-link:hover {
+        transform: translateY(-6px) scale(1.05);
+        box-shadow: 0 25px 60px rgba(2,6,23,0.2);
+      }
+    </style>
     <script>
       // Load local Tailwind if available (checks MIME to avoid console errors), else CDN fallback
       (async function(){
@@ -47,77 +97,22 @@
       })();
     </script>
   </head>
-  <body class="apple text-gray-900 min-h-screen flex flex-col">
+  <body class="apple text-gray-900 min-h-screen flex flex-col bg-white">
     <div id="siteHeader"></div>
     <main class="flex-1">
       <!-- Hero -->
-      <section class="container w-full max-w-6xl px-4 pt-14 pb-10">
-        <div class="grid grid-cols-1 lg:grid-cols-[1.15fr,0.85fr] gap-10 items-center">
-          <div>
-            <div class="inline-flex items-center gap-2 text-xs text-blue-700 bg-blue-50/70 border border-blue-100 rounded-full px-3 py-1 mb-3">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
-              <span>Thiết kế theo phong cách Apple</span>
-            </div>
-            <h1 class="text-4xl sm:text-5xl font-semibold leading-[1.08] tracking-tight">
-              Học AI tinh gọn, trực quan<br class="hidden sm:block" /> và thực sự hiệu quả
-            </h1>
-            <p class="mt-4 text-gray-600 max-w-xl">
-              Lộ trình rõ ràng, theo dõi tiến trình, nội dung cập nhật liên tục. Tập trung vào trải nghiệm học mượt mà với giao diện Liquid Glass.
-            </p>
-            <div class="mt-6 flex flex-wrap items-center gap-3">
-              <a href="./app.html#dashboard" class="btn btn-primary btn-lg">Vào ứng dụng</a>
-              <a href="./login.html" class="btn btn-neutral btn-lg">Đăng nhập</a>
-            </div>
-            <div class="mt-4 text-xs text-gray-500">Không cần cài đặt • Đồng bộ trên mọi thiết bị</div>
-          </div>
-
-          <!-- Showcase card -->
-          <div class="glass-card p-4 rounded-2xl shadow hover-lift">
-            <div class="flex items-center justify-between">
-              <div class="text-sm font-semibold">Khoá học nổi bật</div>
-              <div class="text-[10px] text-gray-500">Xem tất cả</div>
-            </div>
-            <div class="mt-3 grid grid-cols-1 gap-3">
-              <div class="bg-white/70 border rounded p-3 flex items-center justify-between">
-                <div>
-                  <div class="text-sm font-medium">Nhập môn Machine Learning</div>
-                  <div class="text-xs text-gray-500">12 bài học • Cơ bản</div>
-                </div>
-                <div class="text-[10px] text-blue-600">Bắt đầu</div>
-              </div>
-              <div class="bg-white/70 border rounded p-3 flex items-center justify-between">
-                <div>
-                  <div class="text-sm font-medium">Prompt Engineering</div>
-                  <div class="text-xs text-gray-500">8 bài học • Thực chiến</div>
-                </div>
-                <div class="text-[10px] text-blue-600">Tiếp tục</div>
-              </div>
-              <div class="bg-white/70 border rounded p-3 flex items-center justify-between">
-                <div>
-                  <div class="text-sm font-medium">Xây dựng ứng dụng AI</div>
-                  <div class="text-xs text-gray-500">10 bài học • Ứng dụng</div>
-                </div>
-                <div class="text-[10px] text-blue-600">Khám phá</div>
-              </div>
-            </div>
-          </div>
+      <section class="w-full relative min-h-[90vh] px-0 pt-14 pb-10 bubble-wrap flex items-center">
+        <div class="bubble-field" aria-hidden="true" id="heroBubbles"></div>
+        <div class="max-w-3xl mx-auto text-center px-4 relative z-10">
+          <h1 class="text-7xl sm:text-8xl md:text-9xl font-semibold leading-[1.03] tracking-tight fx-title" data-split="chars" style="--delay:.05s; font-size: 8rem;">AI COURSES</h1>
+          <p class="mt-4 fx-subtitle text-lg sm:text-xl" data-split="chars" style="--delay:.55s">ĐƯỢC TRỊNH TẤN MINH PHÁT TRIỂN</p>
         </div>
       </section>
 
-      <!-- Trust bar -->
-      <section class="container w-full max-w-6xl px-4 pb-6">
-        <div class="glass-card rounded-xl px-4 py-3 text-xs text-gray-600 flex items-center justify-center gap-6">
-          <span>Xây dựng với</span>
-          <span class="font-semibold">Firebase</span>
-          <span class="opacity-40">•</span>
-          <span class="font-semibold">Tailwind</span>
-          <span class="opacity-40">•</span>
-          <span class="font-semibold">Vanilla JS</span>
-        </div>
-      </section>
 
       <!-- Feature cards -->
-      <section class="container w-full max-w-6xl px-4 py-10">
+      <section class="container w-full max-w-6xl px-4 py-10 bg-transparent">
+        <h2 class="text-2xl font-semibold mb-4">CHỨC NĂNG HỌC TẬP NỔI BẬT</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="glass-card p-5 hover-lift">
             <div class="flex items-center gap-3">
@@ -143,58 +138,115 @@
         </div>
       </section>
 
-      <!-- Outline preview -->
-      <section class="container w-full max-w-6xl px-4 pb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-          <div class="glass-card p-6">
-            <div class="text-sm font-semibold mb-2">Cảm hứng từ Apple</div>
-            <h2 class="text-2xl font-semibold">Trải nghiệm mượt mà, tinh tế</h2>
-            <p class="text-gray-600 mt-2">Tập trung vào nội dung, micro‑interaction nhẹ nhàng, nền glass giúp giảm nhiễu thị giác.</p>
-            <div class="mt-4 flex gap-3">
-              <a href="./app.html#home" class="btn btn-neutral">Khám phá khoá học</a>
-              <a href="./login.html" class="btn btn-primary">Bắt đầu học</a>
-            </div>
-          </div>
-          <div class="glass-card p-6">
-            <div class="text-sm font-semibold mb-3">Ví dụ outline</div>
-            <ol class="space-y-2 text-sm">
-              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
-                <span>1. Giới thiệu & thiết lập môi trường</span>
-                <span class="text-xs text-gray-500">10 phút</span>
-              </li>
-              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
-                <span>2. Khái niệm cốt lõi trong ML</span>
-                <span class="text-xs text-gray-500">18 phút</span>
-              </li>
-              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
-                <span>3. Bài tập thực hành</span>
-                <span class="text-xs text-gray-500">30 phút</span>
-              </li>
-              <li class="bg-white/70 border rounded px-3 py-2 flex items-center justify-between">
-                <span>4. Ứng dụng mini cuối chương</span>
-                <span class="text-xs text-gray-500">25 phút</span>
-              </li>
-            </ol>
-          </div>
+      <!-- Tech bar -->
+      <section class="container w-full max-w-6xl px-4 pb-6">
+        <div class="glass-card rounded-xl px-4 py-3 text-xs text-gray-600 flex items-center justify-center gap-6">
+          <span>Công nghệ & tối ưu tốc độ</span>
+          <span class="font-semibold">Firebase</span>
+          <span class="opacity-40">•</span>
+          <span class="font-semibold">Tailwind (JIT)</span>
+          <span class="opacity-40">•</span>
+          <span class="font-semibold">Vanilla JS</span>
+          <span class="opacity-40">•</span>
+          <span>Preconnect • Modulepreload</span>
         </div>
       </section>
 
-      <!-- CTA banner -->
-      <section class="container w-full max-w-6xl px-4 pb-16">
-        <div class="glass-card p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <div class="text-sm text-gray-600">Sẵn sàng bắt đầu?</div>
-            <div class="text-xl font-semibold">Vào ứng dụng và khám phá ngay hôm nay</div>
-          </div>
-          <div class="flex gap-3">
-            <a href="./app.html#dashboard" class="btn btn-primary">Vào ứng dụng</a>
-            <a href="./login.html" class="btn btn-neutral">Đăng nhập</a>
-          </div>
-        </div>
-      </section>
+      
     </main>
 
-    <footer class="mt-auto py-6 text-center text-xs text-gray-500">© 2025 AI Courses — Phát triển bởi Trịnh Tấn Minh</footer>
+    <footer class="mt-auto py-8">
+      <div class="container max-w-6xl mx-auto px-4">
+        <div class="glass-card p-6">
+          <div class="text-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">AI Courses</h3>
+          </div>
+          <div class="flex justify-center space-x-8 mb-4">
+            <a href="https://www.youtube.com/@trinhtanminh.official" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors footer-link p-2 rounded-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              YouTube
+            </a>
+            <a href="https://www.facebook.com/trinhtanminh2002/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors footer-link p-2 rounded-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Facebook
+            </a>
+            <a href="https://www.instagram.com/trinhtanminh2k2/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 hover:text-pink-600 transition-colors footer-link p-2 rounded-lg">
+              <svg class="w-6 h-6" fill="url(#instagram-gradient)" viewBox="0 0 24 24">
+                <defs>
+                  <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#833ab4;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#fd1d1d;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fcb045;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              Instagram
+            </a>
+            <a href="https://www.tiktok.com/@trinhtanminh.official" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 hover:text-black transition-colors footer-link p-2 rounded-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+              </svg>
+              TikTok
+            </a>
+          </div>
+          <div class="text-center text-xs text-gray-500">
+            © 2025 AI Courses — Phát triển bởi Trịnh Tấn Minh
+          </div>
+        </div>
+      </div>
+    </footer>
     <script type="module" src="./js/header.js"></script>
+    <script>
+      (function(){
+        const field = document.getElementById('heroBubbles');
+        if(!field) return;
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const COUNT = prefersReduced ? 6 : 14;
+        const rnd = (min, max) => Math.random() * (max - min) + min;
+        for (let i = 0; i < COUNT; i++) {
+          const b = document.createElement('div');
+          b.className = 'bubble';
+          const size = Math.round(rnd(60, 170));
+          const left = rnd(0, 100);
+          const delay = -rnd(0, 16); // negative to stagger immediately
+          const dur = rnd(16, 28);
+          const amp = Math.round(rnd(18, 60));
+          const op = rnd(0.35, 0.8);
+          b.style.width = size + 'px';
+          b.style.height = size + 'px';
+          b.style.left = left + '%';
+          b.style.bottom = '-10%';
+          b.style.setProperty('--dur', dur + 's');
+          b.style.setProperty('--amp', amp + 'px');
+          b.style.setProperty('--op', op.toFixed(2));
+          b.style.animationDelay = delay + 's';
+          field.appendChild(b);
+        }
+      })();
+    </script>
+    <script>
+      // Split text into characters (preserve spaces) and apply staggered animation
+      (function(){
+        function splitToChars(el){
+          const text = el.textContent;
+          el.textContent = '';
+          let idx = 0;
+          Array.from(text).forEach((ch) => {
+            if (ch === ' ') { el.appendChild(document.createTextNode(' ')); return; }
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.style.setProperty('--i', idx++);
+            span.textContent = ch;
+            el.appendChild(span);
+          });
+        }
+        document.querySelectorAll('[data-split="chars"]').forEach(splitToChars);
+      })();
+    </script>
   </body>
   </html>

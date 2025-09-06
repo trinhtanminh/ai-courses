@@ -20,6 +20,18 @@
     <link rel="preload" as="style" href="./css/liquid.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/liquid.css" />
+    <style>
+      /* Disable hover/focus effects for the lesson content textarea in admin */
+      textarea[name="content"],
+      textarea[name="content"]:hover,
+      textarea[name="content"]:focus,
+      textarea[name="content"]:active {
+        box-shadow: none !important;
+        outline: none !important;
+        transition: none !important;
+        border-color: #d1d5db !important; /* Tailwind gray-300 */
+      }
+    </style>
   </head>
   <body class="apple text-gray-900 min-h-screen flex flex-col">
     <div id="siteHeader"></div>
@@ -129,9 +141,18 @@
               </div>
               <div class="videosRows space-y-2"></div>
             </div>
-            <textarea name="content" class="border rounded px-2 py-1 md:col-span-2" placeholder="Nội dung bài học (mô tả dài)"></textarea>
-            <textarea name="notes" class="border rounded px-2 py-1 md:col-span-2" placeholder="Ghi chú"></textarea>
-            <textarea name="exercises" class="border rounded px-2 py-1 md:col-span-2" placeholder="Bài tập (mỗi dòng một mục)"></textarea>
+            <label class="block md:col-span-2">
+              <span class="text-sm">Nội dung bài học</span>
+              <textarea name="content" class="border border-gray-300 rounded w-full px-3 py-2 bg-white" placeholder="Nội dung bài học (mô tả dài)"></textarea>
+            </label>
+            <label class="block md:col-span-2">
+              <span class="text-sm">Ghi chú</span>
+              <textarea name="notes" class="border border-gray-300 rounded w-full px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400" placeholder="Ghi chú"></textarea>
+            </label>
+            <label class="block md:col-span-2">
+              <span class="text-sm">Bài tập</span>
+              <textarea name="exercises" class="border border-gray-300 rounded w-full px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400" placeholder="Bài tập (mỗi dòng; có thể kèm link: Tiêu đề | https://...)"></textarea>
+            </label>
             <div class="md:col-span-2 resources-group">
               <div class="flex items-center justify-between mb-1">
                 <span class="text-sm">Tài liệu</span>
@@ -159,11 +180,15 @@
             <span class="text-sm">Mô tả</span>
             <input name="description" class="border rounded w-full px-3 py-2" />
           </label>
+          <label class="block md:col-span-2">
+            <span class="text-sm">Ảnh bìa (URL)</span>
+            <input name="coverUrl" type="url" placeholder="https://..." class="border rounded w-full px-3 py-2" />
+          </label>
           <div class="md:col-span-2">
             <div class="text-sm text-gray-600 mb-1">Bài học</div>
             <div class="lessons space-y-2"></div>
-            <form class="addLesson mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
-              <input name="title" class="border rounded px-2 py-1" placeholder="Tiêu đề bài học" required />
+          <form class="addLesson mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <input name="title" class="border rounded px-2 py-1" placeholder="Tiêu đề bài học" required />
               <div class="md:col-span-2 videos-group">
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-sm">Video</span>
@@ -171,9 +196,18 @@
                 </div>
                 <div class="videosRows space-y-2"></div>
               </div>
-              <textarea name="content" class="border rounded px-2 py-1 md:col-span-2" placeholder="Nội dung bài học (mô tả dài)"></textarea>
-              <textarea name="notes" class="border rounded px-2 py-1 md:col-span-2" placeholder="Ghi chú"></textarea>
-              <textarea name="exercises" class="border rounded px-2 py-1 md:col-span-2" placeholder="Bài tập (mỗi dòng một mục)"></textarea>
+              <label class="block md:col-span-2">
+                <span class="text-sm">Nội dung bài học</span>
+                <textarea name="content" class="border border-gray-300 rounded w-full px-3 py-2 bg-white" placeholder="Nội dung bài học (mô tả dài)"></textarea>
+              </label>
+              <label class="block md:col-span-2">
+                <span class="text-sm">Ghi chú</span>
+                <textarea name="notes" class="border border-gray-300 rounded w-full px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400" placeholder="Ghi chú"></textarea>
+              </label>
+              <label class="block md:col-span-2">
+                <span class="text-sm">Bài tập</span>
+                <textarea name="exercises" class="border border-gray-300 rounded w-full px-3 py-2 bg-white shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400" placeholder="Bài tập (mỗi dòng; có thể kèm link: Tiêu đề | https://...)"></textarea>
+              </label>
               <div class="md:col-span-2 resources-group">
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-sm">Tài liệu</span>

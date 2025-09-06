@@ -450,6 +450,7 @@ export async function renderCourseAdd(root) {
       <form class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-white border rounded p-4">
         <input name="title" type="text" placeholder="Tiêu đề" class="border rounded px-3 py-2" required />
         <input name="description" type="text" placeholder="Mô tả ngắn" class="border rounded px-3 py-2" required />
+        <input name="coverUrl" type="url" placeholder="Link ảnh bìa (https://...)" class="border rounded px-3 py-2" />
         <button class="bg-green-600 text-white rounded px-4">Tạo</button>
         <div class="md:col-span-3 text-xs text-gray-500">Sau khi tạo, chuyển sang màn chỉnh sửa để thêm bài học.</div>
       </form>
@@ -463,8 +464,9 @@ export async function renderCourseAdd(root) {
     const fd = new FormData(form);
     const title = fd.get('title');
     const description = fd.get('description');
+    const coverUrl = (fd.get('coverUrl') || '').toString().trim();
     const ref = await addDoc(collection(db, 'courses'), {
-      title, description, lessons: [], createdAt: Date.now(), updatedAt: Date.now()
+      title, description, coverUrl, lessons: [], createdAt: Date.now(), updatedAt: Date.now()
     });
     alert('Đã tạo khoá học: ' + ref.id);
     location.hash = `#courses/edit/${ref.id}`;
@@ -485,12 +487,14 @@ export async function renderCourseEdit(root, id, tpl) {
   const form = node.querySelector('form');
   const title = form.querySelector('input[name="title"]');
   const desc = form.querySelector('input[name="description"]');
+  const cover = form.querySelector('input[name="coverUrl"]');
   const lessonsWrap = form.querySelector('.lessons');
   const addLessonForm = form.querySelector('form.addLesson');
   bindResourceRows(addLessonForm);
   bindVideoRows(addLessonForm);
   title.value = c.title || '';
   desc.value = c.description || '';
+  if (cover) cover.value = c.coverUrl || '';
 
   let editIndex = null; // index of lesson being edited
   function renderLessons(list) {
@@ -643,7 +647,7 @@ export async function renderCourseEdit(root, id, tpl) {
 
   form.querySelector('button.save').addEventListener('click', async (e) => {
     e.preventDefault();
-    await updateDoc(ref, { title: title.value, description: desc.value, updatedAt: Date.now() });
+    await updateDoc(ref, { title: title.value, description: desc.value, coverUrl: cover?.value || '', updatedAt: Date.now() });
     alert('Đã lưu');
     location.hash = '#courses/list';
   });
