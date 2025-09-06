@@ -89,7 +89,7 @@ export function lessonItem(lesson, index, checked, onToggle) {
       </label>
     </div>
     <div class="mt-4 space-y-4 details">
-      <!-- Media row: video + resources side by side on md+ -->
+      <!-- Media row: video -->
       <div class="media md:flex md:gap-4">
         <div class="video hidden md:flex-1 md:min-w-0">
           <div class="section-head">
@@ -100,13 +100,14 @@ export function lessonItem(lesson, index, checked, onToggle) {
             <iframe class="w-full h-full" src="" title="Video bài giảng" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
         </div>
-        <div class="resources hidden md:flex-none md:basis-40 glass-card p-3">
-          <div class="section-head">
-            <span class="icon" aria-hidden="true">📎</span>
-            <span class="label">Tài liệu</span>
-          </div>
-          <ul class="resource-list"></ul>
+      </div>
+      <!-- Resources moved below the video -->
+      <div class="resources hidden glass-card p-3">
+        <div class="section-head">
+          <span class="icon" aria-hidden="true">📎</span>
+          <span class="label">Tài liệu</span>
         </div>
+        <ul class="resource-list"></ul>
       </div>
       <div class="content hidden">
         <div class="section-head">
@@ -158,7 +159,7 @@ export function lessonItem(lesson, index, checked, onToggle) {
       const iframe = document.createElement('iframe');
       iframe.className = 'w-full h-full';
       const embed = toEmbed(v.url);
-      const playerUrl = `/player.html?embed=${encodeURIComponent(btoa(embed))}&o=${encodeURIComponent(btoa(v.url || ''))}&t=${encodeURIComponent(v.title || '')}`;
+      const playerUrl = `./player.html?embed=${encodeURIComponent(btoa(embed))}&o=${encodeURIComponent(btoa(v.url || ''))}&t=${encodeURIComponent(v.title || '')}`;
       iframe.src = playerUrl;
       iframe.title = 'Video bài giảng';
       iframe.frameBorder = '0';

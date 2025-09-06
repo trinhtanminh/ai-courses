@@ -12,15 +12,15 @@
     <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://firebasestorage.app" crossorigin />
-    <link rel="modulepreload" href="/js/firebase.js" />
-    <link rel="modulepreload" href="/js/auth.js" />
-    <link rel="modulepreload" href="/js/components.user.js" />
-    <link rel="modulepreload" href="/js/courses.js" />
-    <link rel="modulepreload" href="/js/user.app.js" />
-    <link rel="modulepreload" href="/js/header.js" />
-    <link rel="preload" as="style" href="/css/liquid.css" />
+    <link rel="modulepreload" href="./js/firebase.js" />
+    <link rel="modulepreload" href="./js/auth.js" />
+    <link rel="modulepreload" href="./js/components.user.js" />
+    <link rel="modulepreload" href="./js/courses.js" />
+    <link rel="modulepreload" href="./js/user.app.js" />
+    <link rel="modulepreload" href="./js/header.js" />
+    <link rel="preload" as="style" href="./css/liquid.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="stylesheet" href="./css/liquid.css" />
   </head>
   <body class="apple text-gray-900 min-h-screen flex flex-col">
     <div id="siteHeader"></div>
@@ -39,11 +39,11 @@
               <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="10" width="7" height="11" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
               <span>Bảng điều khiển</span>
             </a>
-            <a id="sbAdminLink" class="nav-pill hidden" href="/admin.html">
+            <a id="sbAdminLink" class="nav-pill hidden" href="./admin.html">
               <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <span>Quản trị</span>
             </a>
-            <a id="sbLoginLink" class="nav-pill" href="/login.html">
+            <a id="sbLoginLink" class="nav-pill" href="./login.html">
               <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
               <span>Đăng nhập</span>
             </a>
@@ -96,6 +96,6 @@
       // Init user app (router + views)
       setupUserApp();
     </script>
-    <script type="module" src="/js/header.js"></script>
+    <script type="module" src="./js/header.js"></script>
   </body>
   </html>

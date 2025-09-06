@@ -12,14 +12,14 @@
     <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://firebasestorage.app" crossorigin />
-    <link rel="modulepreload" href="/js/firebase.js" />
-    <link rel="modulepreload" href="/js/auth.js" />
-    <link rel="modulepreload" href="/js/components.admin.js" />
-    <link rel="modulepreload" href="/js/admin.js" />
-    <link rel="modulepreload" href="/js/header.js" />
-    <link rel="preload" as="style" href="/css/liquid.css" />
+    <link rel="modulepreload" href="./js/firebase.js" />
+    <link rel="modulepreload" href="./js/auth.js" />
+    <link rel="modulepreload" href="./js/components.admin.js" />
+    <link rel="modulepreload" href="./js/admin.js" />
+    <link rel="modulepreload" href="./js/header.js" />
+    <link rel="preload" as="style" href="./css/liquid.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="stylesheet" href="./css/liquid.css" />
   </head>
   <body class="apple text-gray-900 min-h-screen flex flex-col">
     <div id="siteHeader"></div>
@@ -198,7 +198,7 @@
       import { requireAdmin } from './js/auth.js';
       import { setupAdminApp } from './js/admin.js';
 
-      await requireAdmin('/login.html');
+      await requireAdmin('./login.html');
 
       const view = document.getElementById('view');
       const tpl = {
@@ -218,6 +218,6 @@
       window.addEventListener('hashchange', highlight);
       highlight();
     </script>
-    <script type="module" src="/js/header.js"></script>
+    <script type="module" src="./js/header.js"></script>
   </body>
   </html>

@@ -17,7 +17,7 @@ async function renderHome(view) {
 }
 
 async function renderDashboard(view) {
-  await requireAuth('/login.html');
+  await requireAuth('./login.html');
   set(view, `
     <h1 class="text-2xl font-semibold mb-6">Khoá học của tôi</h1>
     <div id="enrolledList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"></div>
@@ -29,7 +29,7 @@ async function renderDashboard(view) {
 }
 
 async function renderCourse(view, id) {
-  await requireAuth('/login.html');
+  await requireAuth('./login.html');
   set(view, `
     <div class="grid grid-cols-1 lg:grid-cols-[1fr,300px] gap-6">
       <div class="user-scroll">
@@ -56,7 +56,7 @@ async function renderCourse(view, id) {
 }
 
 async function renderProfile(view) {
-  await requireAuth('/login.html');
+  await requireAuth('./login.html');
   const p = await currentUserProfile();
   const fields = [
     { k: 'Email', v: p?.email || '' },

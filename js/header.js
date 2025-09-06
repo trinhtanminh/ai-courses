@@ -6,7 +6,7 @@ async function injectHeader() {
   const mount = document.getElementById('siteHeader');
   if (!mount) return;
   try {
-    const res = await fetch('/views/header.html', { cache: 'no-store' });
+    const res = await fetch('./views/header.html', { cache: 'no-store' });
     const html = await res.text();
     mount.innerHTML = html;
     try { document.body.classList.add('with-glass-header'); } catch {}

@@ -15,14 +15,14 @@
     <link rel="preconnect" href="https://firebasestorage.app" crossorigin />
 
     <!-- Preload local modules and styles to reduce waterfall -->
-    <link rel="modulepreload" href="/js/firebase.js" />
-    <link rel="modulepreload" href="/js/auth.js" />
-    <link rel="modulepreload" href="/js/components.user.js" />
-    <link rel="modulepreload" href="/js/courses.js" />
-    <link rel="modulepreload" href="/js/user.app.js" />
-    <link rel="modulepreload" href="/js/header.js" />
-    <link rel="preload" as="style" href="/css/liquid.css" />
-    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="modulepreload" href="./js/firebase.js" />
+    <link rel="modulepreload" href="./js/auth.js" />
+    <link rel="modulepreload" href="./js/components.user.js" />
+    <link rel="modulepreload" href="./js/courses.js" />
+    <link rel="modulepreload" href="./js/user.app.js" />
+    <link rel="modulepreload" href="./js/header.js" />
+    <link rel="preload" as="style" href="./css/liquid.css" />
+    <link rel="stylesheet" href="./css/liquid.css" />
     <script>
       // Load local Tailwind if available (checks MIME to avoid console errors), else CDN fallback
       (async function(){
@@ -33,12 +33,12 @@
           console.warn('Tailwind CDN loaded as fallback. Build Tailwind for production.');
         }
         try {
-          const res = await fetch('/css/tailwind.css', { method:'HEAD', cache:'no-store' });
+          const res = await fetch('./css/tailwind.css', { method:'HEAD', cache:'no-store' });
           const ct = (res.headers.get('content-type')||'').toLowerCase();
           if (res.ok && ct.includes('text/css')) {
             var l=document.createElement('link');
             l.rel='stylesheet';
-            l.href='/css/tailwind.css';
+            l.href='./css/tailwind.css';
             document.head.appendChild(l);
           } else {
             loadCdn();
@@ -65,8 +65,8 @@
               Lộ trình rõ ràng, theo dõi tiến trình, nội dung cập nhật liên tục. Tập trung vào trải nghiệm học mượt mà với giao diện Liquid Glass.
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <a href="/app.html#dashboard" class="btn btn-primary btn-lg">Vào ứng dụng</a>
-              <a href="/login.html" class="btn btn-neutral btn-lg">Đăng nhập</a>
+              <a href="./app.html#dashboard" class="btn btn-primary btn-lg">Vào ứng dụng</a>
+              <a href="./login.html" class="btn btn-neutral btn-lg">Đăng nhập</a>
             </div>
             <div class="mt-4 text-xs text-gray-500">Không cần cài đặt • Đồng bộ trên mọi thiết bị</div>
           </div>
@@ -151,8 +151,8 @@
             <h2 class="text-2xl font-semibold">Trải nghiệm mượt mà, tinh tế</h2>
             <p class="text-gray-600 mt-2">Tập trung vào nội dung, micro‑interaction nhẹ nhàng, nền glass giúp giảm nhiễu thị giác.</p>
             <div class="mt-4 flex gap-3">
-              <a href="/app.html#home" class="btn btn-neutral">Khám phá khoá học</a>
-              <a href="/login.html" class="btn btn-primary">Bắt đầu học</a>
+              <a href="./app.html#home" class="btn btn-neutral">Khám phá khoá học</a>
+              <a href="./login.html" class="btn btn-primary">Bắt đầu học</a>
             </div>
           </div>
           <div class="glass-card p-6">
@@ -187,14 +187,14 @@
             <div class="text-xl font-semibold">Vào ứng dụng và khám phá ngay hôm nay</div>
           </div>
           <div class="flex gap-3">
-            <a href="/app.html#dashboard" class="btn btn-primary">Vào ứng dụng</a>
-            <a href="/login.html" class="btn btn-neutral">Đăng nhập</a>
+            <a href="./app.html#dashboard" class="btn btn-primary">Vào ứng dụng</a>
+            <a href="./login.html" class="btn btn-neutral">Đăng nhập</a>
           </div>
         </div>
       </section>
     </main>
 
     <footer class="mt-auto py-6 text-center text-xs text-gray-500">© 2025 AI Courses — Phát triển bởi Trịnh Tấn Minh</footer>
-    <script type="module" src="/js/header.js"></script>
+    <script type="module" src="./js/header.js"></script>
   </body>
   </html>

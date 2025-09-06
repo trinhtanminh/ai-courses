@@ -11,14 +11,14 @@
     <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
-    <link rel="modulepreload" href="/js/firebase.js" />
-    <link rel="modulepreload" href="/js/auth.js" />
-    <link rel="modulepreload" href="/js/components.user.js" />
-    <link rel="modulepreload" href="/js/courses.js" />
-    <link rel="modulepreload" href="/js/header.js" />
-    <link rel="preload" as="style" href="/css/liquid.css" />
+    <link rel="modulepreload" href="./js/firebase.js" />
+    <link rel="modulepreload" href="./js/auth.js" />
+    <link rel="modulepreload" href="./js/components.user.js" />
+    <link rel="modulepreload" href="./js/courses.js" />
+    <link rel="modulepreload" href="./js/header.js" />
+    <link rel="preload" as="style" href="./css/liquid.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/liquid.css" />
+    <link rel="stylesheet" href="./css/liquid.css" />
   </head>
   <body class="apple text-gray-900 min-h-screen flex flex-col">
     <div id="siteHeader"></div>
@@ -39,13 +39,13 @@
       import { requireAuth } from './js/auth.js';
       import { loadCourseAndRender } from './js/courses.js';
 
-      await requireAuth('/login.html');
+      await requireAuth('./login.html');
       await loadCourseAndRender(new URLSearchParams(location.search).get('id'), {
         titleEl: document.getElementById('courseTitle'),
         descEl: document.getElementById('courseDesc'),
         listEl: document.getElementById('lessons')
       });
     </script>
-    <script type="module" src="/js/header.js"></script>
+    <script type="module" src="./js/header.js"></script>
   </body>
   </html>

@@ -43,7 +43,7 @@ export async function sendResetLink(email) {
 
 export async function onLogoutClick() {
   await signOut(auth);
-  location.href = '/';
+  location.href = './';
 }
 
 export async function ensureUserProfile(user) {
@@ -81,7 +81,7 @@ export function currentUserProfile() {
   return getDoc(doc(db, 'users', u.uid)).then(s => s.exists() ? s.data() : null);
 }
 
-export async function requireAuth(redirectTo = '/login.html') {
+export async function requireAuth(redirectTo = './login.html') {
   if (auth.currentUser) return auth.currentUser;
   await new Promise((resolve) => onAuthStateChanged(auth, () => resolve()));
   if (!auth.currentUser) {
@@ -91,12 +91,12 @@ export async function requireAuth(redirectTo = '/login.html') {
   return auth.currentUser;
 }
 
-export async function requireAdmin(redirectTo = '/login.html') {
+export async function requireAdmin(redirectTo = './login.html') {
   await requireAuth(redirectTo);
   const profile = await currentUserProfile();
   if (!profile || profile.role !== 'admin' || profile.disabled) {
     alert('Chỉ quản trị viên mới được truy cập.');
-    location.href = '/';
+    location.href = './';
     throw new Error('not_admin');
   }
 }

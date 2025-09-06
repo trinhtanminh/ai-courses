@@ -12,8 +12,8 @@
     <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
 
     <!-- Preload local modules to reduce waterfall -->
-    <link rel="modulepreload" href="/js/firebase.js" />
-    <link rel="modulepreload" href="/js/auth.js" />
+    <link rel="modulepreload" href="./js/firebase.js" />
+    <link rel="modulepreload" href="./js/auth.js" />
     <script>
       // Load local Tailwind if available (checks MIME to avoid console errors), else CDN fallback
       (async function(){
@@ -24,12 +24,12 @@
           console.warn('Tailwind CDN loaded as fallback. Build Tailwind for production.');
         }
         try {
-          const res = await fetch('/css/tailwind.css', { method:'HEAD', cache:'no-store' });
+          const res = await fetch('./css/tailwind.css', { method:'HEAD', cache:'no-store' });
           const ct = (res.headers.get('content-type')||'').toLowerCase();
           if (res.ok && ct.includes('text/css')) {
             var l=document.createElement('link');
             l.rel='stylesheet';
-            l.href='/css/tailwind.css';
+            l.href='./css/tailwind.css';
             document.head.appendChild(l);
           } else {
             loadCdn();
@@ -51,8 +51,8 @@
     </div>
     <script type="module">
       import { requireAuth } from './js/auth.js';
-      await requireAuth('/login.html');
-
+      await requireAuth('./login.html');
+  
       const p = new URLSearchParams(location.search);
       const b64 = p.get('embed') || '';
       const b64o = p.get('o') || '';
