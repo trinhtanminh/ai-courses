@@ -88,15 +88,7 @@
         titleSpan.textContent = title || '';
         bar.appendChild(titleSpan);
         const actions = document.createElement('div');
-        if (originalUrl) {
-          const a = document.createElement('a');
-          a.href = originalUrl;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.className = 'underline hover:no-underline text-white/80';
-          a.textContent = 'Mở trong tab mới';
-          actions.appendChild(a);
-        }
+        // Removed the "Mở trong tab mới" link as per task
         bar.appendChild(actions);
         container.appendChild(bar);
         const frameWrap = document.createElement('div');
