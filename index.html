@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Courses – Trang chủ</title>
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Performance: warm up critical third-party connections -->
+    <link rel="dns-prefetch" href="//cdn.tailwindcss.com" />
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin />
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin />
@@ -22,7 +23,29 @@
     <link rel="modulepreload" href="/js/header.js" />
     <link rel="preload" as="style" href="/css/liquid.css" />
     <link rel="stylesheet" href="/css/liquid.css" />
-    <link rel="stylesheet" href="/css/tailwind.css" />
+    <script>
+      // Load local Tailwind if available (checks MIME to avoid console errors), else CDN fallback
+      (async function(){
+        function loadCdn(){
+          var s=document.createElement('script');
+          s.src='https://cdn.tailwindcss.com';
+          document.head.appendChild(s);
+          console.warn('Tailwind CDN loaded as fallback. Build Tailwind for production.');
+        }
+        try {
+          const res = await fetch('/css/tailwind.css', { method:'HEAD', cache:'no-store' });
+          const ct = (res.headers.get('content-type')||'').toLowerCase();
+          if (res.ok && ct.includes('text/css')) {
+            var l=document.createElement('link');
+            l.rel='stylesheet';
+            l.href='/css/tailwind.css';
+            document.head.appendChild(l);
+          } else {
+            loadCdn();
+          }
+        } catch (e) { loadCdn(); }
+      })();
+    </script>
   </head>
   <body class="apple text-gray-900 min-h-screen flex flex-col">
     <div id="siteHeader"></div>
