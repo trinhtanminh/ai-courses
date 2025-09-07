@@ -77,3 +77,37 @@ export function collectVideoRows(scope) {
     return { title: title || undefined, url };
   }).filter(Boolean);
 }
+
+// Helper: bind image insertion functionality to content textarea
+export function bindImageInsertion(form) {
+  const contentLabel = form?.querySelector?.('label[for="content"], label:has(textarea[name="content"])');
+  if (!contentLabel) return;
+
+  const textarea = contentLabel.querySelector('textarea[name="content"]');
+  if (!textarea) return;
+
+  // Add image insertion button
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'flex items-center gap-2 mt-1';
+  buttonContainer.innerHTML = `
+    <button type="button" class="insertImage text-xs bg-blue-600 text-white rounded px-2 py-1">+ Chèn hình ảnh</button>
+    <span class="text-xs text-gray-500">Nhập URL hình ảnh để chèn vào nội dung</span>
+  `;
+
+  contentLabel.appendChild(buttonContainer);
+
+  const insertBtn = buttonContainer.querySelector('.insertImage');
+  insertBtn.addEventListener('click', () => {
+    const imageUrl = prompt('Nhập URL hình ảnh (https://...):');
+    if (imageUrl && imageUrl.trim()) {
+      const imgTag = `<img src="${imageUrl.trim()}" alt="Hình ảnh" style="max-width: 100%; height: auto;" />`;
+      const currentContent = textarea.value;
+      const cursorPos = textarea.selectionStart;
+      const beforeText = currentContent.substring(0, cursorPos);
+      const afterText = currentContent.substring(cursorPos);
+      textarea.value = beforeText + '\n' + imgTag + '\n' + afterText;
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos + imgTag.length + 2, cursorPos + imgTag.length + 2);
+    }
+  });
+}

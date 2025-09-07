@@ -245,6 +245,7 @@ body.apple h3 { font-size: var(--fs-h3); line-height: 1.25; }
 
 /* Admin overrides: make existing white bordered blocks look glassy under .apple */
 body.apple .bg-white.border { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; backdrop-filter: saturate(150%) blur(18px); -webkit-backdrop-filter: saturate(150%) blur(18px); border-radius: 14px; box-shadow: var(--glass-shadow); }
+body.apple .bg-white.border { background: var(--glass-bg) !important; border-color: var(--glass-border) !important; backdrop-filter: saturate(150%) blur(18px); -webkit-backdrop-filter: saturate(150%) blur(18px); border-radius: 14px; box-shadow: var(--elev-2); }
 body.apple .bg-white { background: var(--glass-bg); }
 /* Do not force glass border color on form controls */
 body.apple .border:not(input):not(select):not(textarea) { border-color: var(--glass-border); }

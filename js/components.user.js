@@ -120,7 +120,6 @@ export function lessonItem(lesson, index, checked, onToggle) {
     <div class="flex items-start justify-between">
       <div>
         <h3 class="font-medium"></h3>
-        <p class="text-sm text-gray-600 mt-1 short"></p>
       </div>
       <label class="inline-flex items-center gap-2 text-sm ml-4">
         <input type="checkbox" class="w-4 h-4" /> Hoàn thành
@@ -192,10 +191,6 @@ export function lessonItem(lesson, index, checked, onToggle) {
   `;
 
   li.querySelector('h3').textContent = `${index + 1}. ${lesson.title || ''}`;
-  const summary = (lesson.content || '').toString();
-  const short = summary.length > 140 ? summary.slice(0, 140) + '…' : summary;
-  const shortEl = li.querySelector('p.short');
-  if (shortEl) shortEl.textContent = short;
 
   // Videos (multiple) or single videoUrl
   const videosArr = Array.isArray(lesson.videos) && lesson.videos.length ? lesson.videos : (lesson.videoUrl ? [{ title: undefined, url: lesson.videoUrl }] : []);
@@ -237,9 +232,8 @@ export function lessonItem(lesson, index, checked, onToggle) {
     const cwrap = li.querySelector('.content');
     cwrap.id = `lesson-${index + 1}-content`;
     const div = cwrap.querySelector('.doc');
-    // Keep safe: plain text with preserved line breaks
-    div.textContent = lesson.content;
-    div.style.whiteSpace = 'pre-line';
+    // Render HTML to support images and formatting
+    div.innerHTML = lesson.content.replace(/\n/g, '<br>');
     cwrap.classList.remove('hidden');
   }
 

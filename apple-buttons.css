@@ -1,0 +1,132 @@
+/*
+ * Apple Liquid Glass Buttons
+ * A minimalist, elegant button style inspired by Apple's design language.
+ */
+
+:root {
+  /* --- Core Design Tokens --- */
+
+  /* Colors & Materials */
+  --btn-glass-bg: rgba(255, 255, 255, 0.55); /* Nền kính mờ mặc định */
+  --btn-glass-border: rgba(255, 255, 255, 0.45); /* Viền kính */
+  --btn-text-color: #0f172a; /* Màu chữ (Slate 900) */
+  --btn-primary-bg-start: rgba(59, 130, 246, 0.86); /* Màu nền chính (Blue 500) - gradient start */
+  --btn-primary-bg-end: rgba(37, 99, 235, 0.92);   /* Màu nền chính (Blue 600) - gradient end */
+  --btn-primary-border: rgba(147, 197, 253, 0.65); /* Viền nút chính (Blue 300) */
+  --btn-primary-text-color: #ffffff; /* Màu chữ nút chính */
+
+  /* Elevation & Shadows */
+  --btn-shadow-color: rgba(2, 6, 23, 0.08); /* Màu bóng đổ */
+  --btn-shadow-hover-color: rgba(2, 6, 23, 0.12); /* Màu bóng đổ khi hover */
+  --btn-shadow-primary-color: rgba(37, 99, 235, 0.35); /* Màu bóng đổ nút chính */
+  --btn-shadow: 0 8px 22px var(--btn-shadow-color), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  --btn-shadow-hover: 0 12px 30px var(--btn-shadow-hover-color), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  --btn-shadow-primary: 0 12px 28px var(--btn-shadow-primary-color), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+
+  /* Effects */
+  --btn-blur: 12px; /* Độ mờ của nền */
+  --btn-saturation: 160%; /* Độ bão hòa màu của nền */
+
+  /* Sizing & Shape */
+  --btn-radius: 14px; /* Bo góc (để tạo hình chữ nhật mềm mại) */
+  --btn-radius-pill: 9999px; /* Bo góc (để tạo hình viên thuốc) */
+  --btn-padding: 0.65rem 1.25rem; /* Padding bên trong nút */
+
+  /* Typography */
+  --btn-font-weight: 600; /* Độ đậm Semibold */
+  --btn-font-size: 0.95rem; /* Kích thước chữ */
+
+  /* Motion */
+  --btn-transition-duration: 0.2s;
+  --btn-transition-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --- Base Button Style --- */
+.btn {
+  /* Reset trình duyệt */
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+
+  /* Layout & Sizing */
+  position: relative; /* Cần cho pseudo-element ::after */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--btn-padding);
+
+  /* Shape */
+  border-radius: var(--btn-radius); /* Sử dụng --btn-radius-pill cho hình viên thuốc */
+
+  /* Typography */
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  line-height: 1.2;
+  color: var(--btn-text-color);
+
+  /* --- Liquid Glass Material --- */
+  /* 1. Nền kính mờ */
+  background: var(--btn-glass-bg);
+  backdrop-filter: saturate(var(--btn-saturation)) blur(var(--btn-blur));
+  -webkit-backdrop-filter: saturate(var(--btn-saturation)) blur(var(--btn-blur));
+
+  /* 2. Viền kính */
+  border: 1px solid var(--btn-glass-border);
+
+  /* 3. Bóng đổ mềm để tạo hiệu ứng nổi */
+  box-shadow: var(--btn-shadow);
+
+  /* --- Motion & Interaction --- */
+  transition: transform var(--btn-transition-duration) var(--btn-transition-easing),
+              box-shadow var(--btn-transition-duration) var(--btn-transition-easing);
+  will-change: transform, box-shadow; /* Tối ưu hiệu năng animation */
+}
+
+/* 4. Ánh sáng phản chiếu (Glossy Highlight) */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 1px 1px auto 1px; /* Đặt ở trên cùng, bên trong viền */
+  height: 45%;
+  border-radius: inherit; /* Kế thừa bo góc từ nút cha */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+  pointer-events: none; /* Cho phép click xuyên qua */
+}
+
+/* --- States --- */
+
+/* Hover State: Nhấc nút lên */
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--btn-shadow-hover);
+}
+
+/* Active/Pressed State: Nhấn nút xuống */
+.btn:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* Focus State: Vòng sáng hỗ trợ tiếp cận */
+.btn:focus-visible {
+  outline: 2px solid var(--btn-primary-bg-end);
+  outline-offset: 3px;
+}
+
+
+/* --- Primary Button Variant --- */
+.btn.btn-primary {
+  /* Ghi đè màu sắc cho nút chính */
+  color: var(--btn-primary-text-color);
+  background: linear-gradient(180deg, var(--btn-primary-bg-start), var(--btn-primary-bg-end));
+  border-color: var(--btn-primary-border);
+  box-shadow: var(--btn-shadow-primary);
+}
+
+/* Hiệu ứng sáng nhẹ khi hover nút chính */
+.btn.btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 16px 32px var(--btn-shadow-primary-color), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}

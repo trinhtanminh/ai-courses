@@ -1,6 +1,6 @@
 import { db } from './firebase.js';
 import { adminCreateUser } from './auth.js';
-import { el, setChildren, bindResourceRows, collectResourceRows, bindVideoRows, collectVideoRows } from './components.admin.js';
+import { el, setChildren, bindResourceRows, collectResourceRows, bindVideoRows, collectVideoRows, bindImageInsertion } from './components.admin.js';
 import {
   collection, addDoc, getDocs, onSnapshot, doc, setDoc, updateDoc, deleteDoc, getDoc, arrayUnion, arrayRemove, getCountFromServer
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -114,6 +114,7 @@ export function setupAdminCourses({ list, cardTpl, addCourseForm }) {
       const addLessonFormA = card.querySelector('form.addLesson');
       bindResourceRows(addLessonFormA);
       bindVideoRows(addLessonFormA);
+      bindImageInsertion(addLessonFormA);
       addLessonFormA.addEventListener('submit', async (e2) => {
         e2.preventDefault();
         const fd = new FormData(addLessonFormA);
@@ -134,6 +135,7 @@ export function setupAdminCourses({ list, cardTpl, addCourseForm }) {
         addLessonFormA.reset();
         bindResourceRows(addLessonFormA, { reset: true });
         bindVideoRows(addLessonFormA, { reset: true });
+        bindImageInsertion(addLessonFormA, { reset: true });
       });
 
       card.querySelector('button.delete').addEventListener('click', async () => {
@@ -408,6 +410,7 @@ export async function renderCoursesList(root, tpl) {
       const addLessonFormB = card.querySelector('form.addLesson');
       bindResourceRows(addLessonFormB);
       bindVideoRows(addLessonFormB);
+      bindImageInsertion(addLessonFormB);
       addLessonFormB.addEventListener('submit', async (e2) => {
         e2.preventDefault();
         const fd = new FormData(addLessonFormB);
@@ -428,6 +431,7 @@ export async function renderCoursesList(root, tpl) {
         addLessonFormB.reset();
         bindResourceRows(addLessonFormB, { reset: true });
         bindVideoRows(addLessonFormB, { reset: true });
+        bindImageInsertion(addLessonFormB, { reset: true });
       });
 
       card.querySelector('button.delete').addEventListener('click', async () => {
@@ -492,6 +496,7 @@ export async function renderCourseEdit(root, id, tpl) {
   const addLessonForm = form.querySelector('form.addLesson');
   bindResourceRows(addLessonForm);
   bindVideoRows(addLessonForm);
+  bindImageInsertion(addLessonForm);
   title.value = c.title || '';
   desc.value = c.description || '';
   if (cover) cover.value = c.coverUrl || '';
@@ -597,6 +602,7 @@ export async function renderCourseEdit(root, id, tpl) {
     addLessonForm.reset();
     bindResourceRows(addLessonForm, { reset: true });
     bindVideoRows(addLessonForm, { reset: true });
+    bindImageInsertion(addLessonForm, { reset: true });
     const submitBtn = addLessonForm.querySelector('button[type="submit"], .bg-blue-600');
     if (submitBtn) submitBtn.textContent = 'Thêm bài học';
     const cancelBtn = addLessonForm.querySelector('button.cancelEdit');
